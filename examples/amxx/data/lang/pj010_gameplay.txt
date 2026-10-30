@@ -1,0 +1,17 @@
+[en]
+GP_LEAP_WAIT = [G] Leap  %.1fs  %s
+GP_LEAP_READY = [G] Leap  READY
+GP_TOWER_HP = Tower HP %d
+GP_TOWER_DOWN = MAIN TOWER DESTROYED
+GP_SENTRY_PLACED = Sentry gun deployed
+GP_ZOMBIE_ON = You are a zombie now
+GP_LANG_NOW = Language: English
+
+[tw]
+GP_LEAP_WAIT = [G] 飛躍  冷卻 %.1f 秒  %s
+GP_LEAP_READY = [G] 飛躍  可以用了
+GP_TOWER_HP = 主塔血量 %d
+GP_TOWER_DOWN = 主塔被摧毀了
+GP_SENTRY_PLACED = 砲台已架設
+GP_ZOMBIE_ON = 你變成殭屍了
+GP_LANG_NOW = 語言：繁體中文
