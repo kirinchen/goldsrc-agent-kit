@@ -28,6 +28,43 @@ amxxpc pj010_gameplay.sma -opj010_gameplay.amxx
 
 Bind the commands if you like: `bind t gp_tower`, `bind y gp_sentry`, `bind u gp_zombie`.
 
+## Hold-to-spray HE grenades (`pj010_nadespray.sma`)
+
+A separate plugin: hold a key and HE grenades pour out in front of you.
+
+```
+cd cstrike/addons/amxmodx/scripting
+amxxpc pj010_nadespray.sma -opj010_nadespray.amxx
+```
+
+Copy `pj010_nadespray.amxx` to `plugins/`, add `pj010_nadespray.amxx` to `configs/plugins.ini`, then in the console:
+
+```
+bind mouse3 +nadespray
+```
+
+| cvar | default | what |
+|---|---|---|
+| `ns_interval` | `0.05` | seconds between grenades |
+| `ns_duration` | `5.0` | longest spray per press (5.0 / 0.05 = 100 grenades); press again for more |
+
+Each grenade is a real `grenade` entity (kill feed shows the HE icon), bounces, and explodes 1.5 s later:
+100 damage falling to 0 at 350 units, credited to the thrower, who is never hurt by their own spray.
+
+Pitfalls:
+
+- **`set_task` cannot repeat faster than 0.1 s.** The timing is checked every frame in `PlayerPreThink`;
+  a late frame throws the grenades it missed, so one press is always duration / interval grenades.
+- **`MSG_PVS` needs an origin.** `message_begin(MSG_PVS, SVC_TEMPENTITY)` without one sends the explosion
+  to whoever can see the map origin, usually nobody: the grenades do damage but no explosion is drawn.
+- **Do not spawn the grenade right at the eyes**: closer than ~64 units its model fills the screen.
+- Only grenades marked by this plugin (`pev_iuser4`) are touched in the `grenade` think hook; the game's own
+  HE / flash / smoke / C4 keep their behaviour.
+
+Measured on a local listen server, cs_assault (scaled copy), fps_max 100, 3 bots + 4 hostages:
+0.05 / 0.1 / 0.15 s all stayed at 99-101 fps with ~31 / 15 / 10 grenades alive at once; even 0.01 s
+(154 alive) stayed at 100 fps, using 312 of 1905 edicts.
+
 ## Languages
 
 The plugin never prints a literal string; it calls `register_dictionary("pj010_gameplay.txt")`
